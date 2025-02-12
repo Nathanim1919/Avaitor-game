@@ -67,7 +67,7 @@ export class GameService {
     }, 1000);
   }
 
-  cash(betAmount: number): number {
+  cashOut(betAmount: number): number {
     return betAmount * this.gameState.currentMultiplier;
   }
 }
