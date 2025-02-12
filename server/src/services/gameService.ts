@@ -1,5 +1,5 @@
 import type { IGameState } from "../types/IGameState";
-import { generateCrashPoint } from "../utils/rng";
+import { generateCrashPoint } from "../utils/rng.ts";
 
 export class GameService {
   private gameState: IGameState;

@@ -1,5 +1,5 @@
-import { Request, Response } from "express";
-import { GameService } from "../services/gameService";
+import type { Request, Response } from "express";
+import { GameService } from "../services/gameService.ts";
 
 
 const gameService = new GameService();

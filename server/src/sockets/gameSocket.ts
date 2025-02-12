@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import { GameService } from "../services/gameService";
+import { GameService } from "../services/gameService.ts";
 
 
 export const setUpGameSocket = (io: Server) => {

@@ -3,7 +3,7 @@ import {
   getGameState,
   startRound,
   cashOut,
-} from "../controller/gameController";
+} from "../controller/gameController.ts";
 
 const router = express.Router();
 
