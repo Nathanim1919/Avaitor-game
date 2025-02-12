@@ -1,44 +1,126 @@
 import React, { useEffect, useState } from 'react';
+import { io } from 'socket.io-client';
 import PlaneImage from "../assets/plane.png";
 import { Clouds } from './cloud';
 
-interface FlightAnimationProps {
-    multiplier: number;
-}
+const socket = io('http://localhost:3000'); // Connect to the server
 
-const FlightAnimation: React.FC<FlightAnimationProps> = ({ multiplier }) => {
-  const [position, setPosition] = useState({ x: 0, y: 0 }); // Tracks the plane's position (x and y)
+const FlightAnimation: React.FC = () => {
+  const [multiplier, setMultiplier] = useState(1.0);
+  const [isRunning, setIsRunning] = useState(false);
+  const [isCountdown, setIsCountdown] = useState(false);
+  const [countdown, setCountdown] = useState(5);
 
   useEffect(() => {
-    // Update the plane's position based on the multiplier
-    const maxMultiplier = 10; // Maximum multiplier for scaling
-    const scaledMultiplier = Math.min(multiplier, maxMultiplier);
+    socket.on('connect', () => {
+      console.log('Connected to server:', socket.id);
+    });
+    // Listen for game state updates
+    socket.on('gameState', (data) => {
+      setIsRunning(data.isRunning);
+      setIsCountdown(data.isCountdown);
+      setCountdown(data.countdown);
+    });
 
-    // Calculate diagonal movement
-    const newX = scaledMultiplier * 10; // Move horizontally to the right
-    const newY = -scaledMultiplier * 10; // Move vertically upward
+    // Listen for countdown updates
+    socket.on('countdownUpdate', (data) => {
+      setCountdown(data.countdown);
+    });
 
-    setPosition({ x: newX, y: newY });
-  }, [multiplier]);
+    // Listen for flight updates
+    socket.on('flightUpdate', (data) => {
+      setMultiplier(data.multiplier);
+    });
+
+    // Listen for round start
+    socket.on('roundStart', () => {
+      setIsRunning(true);
+      setIsCountdown(false);
+      setMultiplier(1.0);
+    });
+
+    // Listen for round end
+    socket.on('roundEnd', () => {
+      setIsRunning(false);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
+  const startRound = () => {
+    socket.emit('startRound');
+  };
+
+  const cashOut = () => {
+    const betAmount = 10; // Example bet amount
+    socket.emit('cashOut', { userId: '123', betAmount });
+  };
 
   return (
     <div className="relative w-full h-96 bg-blue-200 overflow-hidden">
+      {/* Clouds */}
       <Clouds />
 
+      {/* Flight Path */}
+      <svg className="absolute inset-0 w-full h-full">
+        <path
+          id="flight-path"
+          d="M10 90 C 30 70, 70 30, 90 10" // Cubic Bezier curve
+          stroke="gray"
+          strokeWidth="2"
+          fill="none"
+        />
+      </svg>
+
+      {/* Plane */}
       <div
-        className="absolute bottom-0 left-1/2 transform transition-all duration-500"
+        className="absolute top-0 left-0 w-16 h-16 transition-all duration-500"
         style={{
-          transform: `translate(${position.x}%, ${position.y}%) rotate(45deg)`, // Diagonal movement and rotation
+          offsetPath: 'path("M10 90 C 30 70, 70 30, 90 10")',
+          offsetDistance: `${(multiplier / 10) * 100}%`, // Scale multiplier to path distance
+          rotate: '45deg',
         }}
       >
         <img
           src={PlaneImage}
           alt="Plane"
-          className="w-16 h-16 transform -rotate-90"
+          className="w-full h-full"
         />
       </div>
 
-      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-full bg-gray-500"></div>
+      {/* Countdown Timer */}
+      {isCountdown && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-2xl font-bold">
+          Next Round in: {countdown}s
+        </div>
+      )}
+
+      {/* Multiplier Display */}
+      {isRunning && (
+        <div className="absolute top-4 left-1/2 transform -translate-x-1/2 text-2xl font-bold">
+          Multiplier: {multiplier.toFixed(2)}x
+        </div>
+      )}
+
+      {/* Controls */}
+      <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-4">
+        <button
+          onClick={startRound}
+          disabled={isRunning || !isCountdown}
+          className="px-4 py-2 bg-green-500 text-white rounded"
+        >
+          Start Round
+        </button>
+        <button
+          onClick={cashOut}
+          disabled={!isRunning}
+          className="px-4 py-2 bg-red-500 text-white rounded"
+        >
+          Cash Out
+        </button>
+      </div>
     </div>
   );
 };
