@@ -1,7 +1,7 @@
 export interface IGameState {
     isRunning: boolean;
     isCountdown: boolean;
-    crashPoint: string | null;
+    crashPoint: number | null;
     currentMultiplier: number;
     countdown: number;
 }
