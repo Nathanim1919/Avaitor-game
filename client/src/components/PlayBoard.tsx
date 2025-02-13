@@ -21,7 +21,7 @@ const PlayBoard = () => {
         </div>
       </div>
       <div className="flex-1 grid gap-1 p-4">
-        <button className="bg-green-500 rounded-2xl cursor-pointer shadow-2xl border border-gray-100 flex flex-col items-center justify-center">
+        <button className="bg-green-500 hover:bg-green-600 rounded-2xl cursor-pointer shadow-2xl border border-gray-100 flex flex-col items-center justify-center">
           <span className="text-3xl font-bold">Bet</span>
           <span>400.00 ETB</span>
         </button>
