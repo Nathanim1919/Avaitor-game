@@ -1,6 +1,6 @@
 const PlayBoard = () => {
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 w-[70%] m-auto">
       <div className="flex-1 grid gap-1">
         <div className="flex items-center bg-gray-950">
           <span className="flex-1 w-full grid place-items-center text-2xl font-bold bg-blue-950">
