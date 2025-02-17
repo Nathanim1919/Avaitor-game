@@ -10,8 +10,7 @@ const Game = () => {
       <div className="grid grid-cols-4 px-1 w-full h-full">
         <Bet />
         <div className="col-span-2">
-        <GameBoard />
-
+          <GameBoard />
         </div>
         <div className="bg-gray-900"></div>
       </div>
