@@ -1,15 +1,15 @@
 const PlayBoard = () => {
   return (
-    <div className="flex gap-2 w-[70%] m-auto relative z-50">
+    <div className="flex gap-2 w-[70%] m-auto relative z-50 border border-gray-700 p-1 rounded-md">
       <div className="flex-1 grid gap-1">
-        <div className="flex items-center bg-gray-950">
-          <span className="flex-1 w-full grid place-items-center text-2xl font-bold bg-blue-950">
+        <div className="flex items-center bg-gray-900 border border-gray-700 rounded-md overflow-hidden">
+          <span className="flex-1 w-full grid place-items-center text-2xl font-bold bg-gray-800 cursor-pointer hover:bg-gray-700">
             -
           </span>
-          <span className="flex-1 w-full grid place-items-center text-2xl font-bold">
-            5 ETB
+          <span className="flex-1 w-full grid place-items-center font-bold">
+            1235
           </span>
-          <span className="flex-1 w-full grid place-items-center text-2xl font-bold bg-blue-950">
+          <span className="flex-1 w-full grid place-items-center text-2xl font-bold bg-gray-800 cursor-pointer hover:bg-gray-700">
             +
           </span>
         </div>
