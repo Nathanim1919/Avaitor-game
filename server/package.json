@@ -5,9 +5,9 @@
   "main": "index.ts",
   "type": "module",
   "scripts": {
-    "dev": "nodemon index.ts",
+    "dev": "node api.js && nodemon index.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node api.js && node index.js"
   },
   "keywords": [],
   "author": "",
